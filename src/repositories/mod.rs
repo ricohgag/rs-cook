@@ -1,6 +1,6 @@
 use crate::db::{mysql};
 use crate::repositories::{
-    user::{UserRepo, UserRepoImpl},
+    food::{FoodRepo, FoodRepoImpl},
 };
 use axum::extract::Extension;
 use std::sync::Arc;
@@ -12,30 +12,30 @@ pub type RepoExt = Extension<Arc<RepoImpls>>;
 pub async fn create_repositories() -> RepoImpls {
     let db_pool = Arc::new(mysql::db_connect().await);
     RepoImpls::new(
-        UserRepoImpl::new(db_pool.clone()),
+        FoodRepoImpl::new(db_pool.clone()),
     )
 }
 
 pub struct RepoImpls {
-    pub user: UserRepoImpl,
+    pub food: FoodRepoImpl,
 }
 impl RepoImpls {
     pub fn new(
-        user_repo_impl: UserRepoImpl,
+        food_repo_impl: FoodRepoImpl,
     ) -> Self {
         Self {
-            user: user_repo_impl,
+            food: food_repo_impl,
         }
     }
 }
 
 pub trait Repositories {
-    type UserRepoImpl: UserRepo;
-    fn user(&self) -> &Self::UserRepoImpl;
+    type FoodRepoImpl: FoodRepo;
+    fn food(&self) -> &Self::FoodRepoImpl;
 }
 impl Repositories for RepoImpls {
-    type UserRepoImpl = UserRepoImpl;
-    fn user(&self) -> &Self::UserRepoImpl {
-        &self.user
+    type FoodRepoImpl = FoodRepoImpl;
+    fn food(&self) -> &Self::FoodRepoImpl {
+        &self.food
     }
 }

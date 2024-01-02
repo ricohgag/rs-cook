@@ -12,7 +12,7 @@ pub struct Food {
     pub name: String,
 
     
-    pub type: Option<i32>,
+    pub kind: Option<i32>,
 
     
     pub tag: Option<i32>,
@@ -37,7 +37,7 @@ pub struct FoodParam {
     pub name: String,
 
 
-    pub type: Option<i32>,
+    pub kind: Option<i32>,
 
 
     pub tag: Option<i32>,
@@ -59,7 +59,7 @@ pub struct FoodQueryParam {
 
     pub name: Option<String>,
 
-    pub type: Option<i32>,
+    pub kind: Option<i32>,
 
     pub tag: Option<i32>,
 

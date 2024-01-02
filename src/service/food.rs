@@ -1,14 +1,14 @@
 use crate::error::Result;
 use crate::models::food::{Food, FoodParam, FoodQueryParam};
-use crate::repositories::{food::UserRepo, Repositories};
+use crate::repositories::{food::FoodRepo, Repositories};
 use std::sync::Arc;
 
 
 pub async fn select_page<R: Repositories>(repo: Arc<R>,
     food_query_param: &FoodQueryParam,
-) -> Result<Vec<User>> {
-    let users = repo.food().find_all(food_query_param).await?;
-    Ok(users)
+) -> Result<Vec<Food>> {
+    let foods = repo.food().find_all(food_query_param).await?;
+    Ok(foods)
 }
 
 pub async fn select_one<R: Repositories>(repo: Arc<R>, food_id: i32) -> Result<Food> {
@@ -17,16 +17,16 @@ pub async fn select_one<R: Repositories>(repo: Arc<R>, food_id: i32) -> Result<F
 }
 
 pub async fn insert<R: Repositories>(repo: Arc<R>, food_param: FoodParam) -> Result<()> {
-    repo.food().insert(food_param).await?;
+    repo.food().insert(&food_param).await?;
     Ok(())
 }
 
 pub async fn update<R: Repositories>(repo: Arc<R>, food_param: FoodParam) -> Result<()> {
-    repo.food().update(food_param).await?;
+    repo.food().update_by_id(&food_param).await?;
     Ok(())
 }
 
 pub async fn delete<R: Repositories>(repo: Arc<R>, food_id: i32) -> Result<()> {
-    repo.food().delete(food_id).await?;
+    repo.food().delete_by_id(food_id).await?;
     Ok(())
 }
