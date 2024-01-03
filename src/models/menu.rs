@@ -3,12 +3,12 @@ use sqlx::FromRow;
 use chrono::{DateTime, Utc};
 
 #[derive(Serialize, Deserialize, FromRow, Debug)]
-pub struct Food {
+pub struct Menu {
 
     //主键    
     pub id: i64,
 
-    //食物名称    
+    //菜单名称    
     pub name: String,
 
     
@@ -22,12 +22,12 @@ pub struct Food {
 
 
 #[derive(Serialize, Deserialize, FromRow, Debug)]
-pub struct FoodParam {
+pub struct MenuParam {
 
     //主键
     pub id: i64,
 
-    //食物名称
+    //菜单名称
     pub name: String,
 
 
@@ -40,11 +40,11 @@ pub struct FoodParam {
 }
 
 #[derive(Serialize, Deserialize, FromRow, Debug)]
-pub struct FoodQueryParam {
+pub struct MenuQueryParam {
 
     //主键
     pub id: Option<i64>,
-    //食物名称
+    //菜单名称
     pub name: Option<String>,
 
     pub create_time: Option<DateTime<Utc>>,

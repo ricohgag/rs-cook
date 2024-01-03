@@ -6,5 +6,5 @@ use crate::router::router;
 
 pub async fn create_app() -> Router {
     let repositories = Arc::new(create_repositories().await);
-    router().layer(Extension(repositories))
+    Router::new().nest_service("/api", router()).layer(Extension(repositories))
 }
