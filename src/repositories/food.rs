@@ -35,6 +35,14 @@ pub trait FoodRepo {
 impl FoodRepo for FoodRepoImpl {
     async fn find_all(&self, food_query_param: &FoodQueryParam) -> Result<Vec<Food>> {
         let mut query = sqlx::query_as::<_, Food>("select * from cook_food");
+        // 判断food_query_param中的name是否为空或''，如果不是，则添加where条件
+        if let Some(name) = &food_query_param.name {
+            if !name.is_empty() {
+                query = sqlx::query_as::<_, Food>("select * from cook_food where name like ?")
+                    .bind(String::from("%") + name + "%");
+            }
+        }
+
         let result = query
             .fetch_all(&*self.pool)
             .await
@@ -43,7 +51,7 @@ impl FoodRepo for FoodRepoImpl {
     }
 
     async fn find_by_id(&self, food_id: i32) -> Result<Food> {
-        let row = sqlx::query_as::<_, Food>("select * from cook_food where id = $1")
+        let row = sqlx::query_as::<_, Food>("select * from cook_food where id = ?")
             .bind(food_id)
             .fetch_one(&*self.pool)
             .await
