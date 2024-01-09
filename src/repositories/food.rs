@@ -80,6 +80,11 @@ impl FoodRepo for FoodRepoImpl {
     }
 
     async fn delete_by_id(&self, id: i32) -> Result<()> {
-        todo!()
+        sqlx::query("delete from cook_food where id = ?")
+            .bind(id)
+            .execute(&*self.pool)
+            .await
+            .context("DB ERROR (delete food)")?;
+        Ok(())
     }
 }
