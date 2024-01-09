@@ -9,7 +9,7 @@ pub struct Food {
     pub id: i64,
 
     //食物名称    
-    pub name: String,
+    pub food_name: String,
 
     
     pub create_time: DateTime<Utc>,
@@ -25,17 +25,10 @@ pub struct Food {
 pub struct FoodParam {
 
     //主键
-    pub id: i64,
+    pub id: Option<i64>,
 
     //食物名称
-    pub name: String,
-
-
-    pub create_time: DateTime<Utc>,
-
-
-    pub update_time: DateTime<Utc>,
-
+    pub food_name: String,
 
 }
 
@@ -45,7 +38,7 @@ pub struct FoodQueryParam {
     //主键
     pub id: Option<i64>,
     //食物名称
-    pub name: Option<String>,
+    pub food_name: Option<String>,
 
     pub create_time: Option<DateTime<Utc>>,
 

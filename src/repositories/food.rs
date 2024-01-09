@@ -1,8 +1,10 @@
+
 use crate::error::Result;
 use crate::models::food::{Food, FoodParam, FoodQueryParam};
 use crate::db::mysql::Db;
 use axum::async_trait;
 use anyhow::Context;
+use tracing::info;
 
 
 pub struct FoodRepoImpl {
@@ -36,9 +38,9 @@ impl FoodRepo for FoodRepoImpl {
     async fn find_all(&self, food_query_param: &FoodQueryParam) -> Result<Vec<Food>> {
         let mut query = sqlx::query_as::<_, Food>("select * from cook_food");
         // 判断food_query_param中的name是否为空或''，如果不是，则添加where条件
-        if let Some(name) = &food_query_param.name {
+        if let Some(name) = &food_query_param.food_name {
             if !name.is_empty() {
-                query = sqlx::query_as::<_, Food>("select * from cook_food where name like ?")
+                query = sqlx::query_as::<_, Food>("select * from cook_food where food_name like ?")
                     .bind(String::from("%") + name + "%");
             }
         }
@@ -60,7 +62,17 @@ impl FoodRepo for FoodRepoImpl {
     }
 
     async fn insert(&self, food_param: &FoodParam) -> Result<()> {
-        todo!()
+        info!("insert food: {:?}", food_param);
+
+        let now = chrono::Utc::now();
+        sqlx::query("INSERT INTO `rs_cook`.`cook_food` (`food_name`, `create_time`, `update_time`) VALUES (?, ?, ?);")
+            .bind(&food_param.food_name)
+            .bind(now)
+            .bind(now)
+            .execute(&*self.pool)
+            .await
+            .context("DB ERROR (insert food)")?;
+        Ok(())
     }
 
     async fn update_by_id(&self, food_param: &FoodParam) -> Result<()> {
